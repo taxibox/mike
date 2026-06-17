@@ -10,7 +10,18 @@ jobs:
     name: Deploy to stage.taxibox.com.au
     runs-on: self-hosted
 
+    defaults:
+      run:
+        shell: bash -l {0}
+
     steps:
+      - name: Load nvm and set Node version
+        run: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          nvm use 22
+          echo "$NVM_BIN" >> $GITHUB_PATH
+
       - name: Pull latest code
         run: |
           if [ -d /var/www/mike ]; then
