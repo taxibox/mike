@@ -34,6 +34,23 @@ export default function LoginPage() {
         }
     }, [authLoading, isAuthenticated, router]);
 
+    const handleMicrosoftLogin = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: "azure",
+                options: {
+                    redirectTo: `${window.location.origin}/mike/assistant`,
+                },
+            });
+            if (error) throw error;
+        } catch (error: any) {
+            setError(error.message || "An error occurred");
+            setLoading(false);
+        }
+    };
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -130,6 +147,21 @@ export default function LoginPage() {
                             {loading ? "Logging in..." : "Log in"}
                         </Button>
                     </form>
+
+                    <div className="flex items-center gap-3 my-4">
+                        <div className="flex-1 h-px bg-gray-200" />
+                        <span className="text-xs text-gray-400">or</span>
+                        <div className="flex-1 h-px bg-gray-200" />
+                    </div>
+
+                    <Button
+                        type="button"
+                        onClick={handleMicrosoftLogin}
+                        disabled={loading}
+                        className="w-full bg-[#0078d4] hover:bg-[#106ebe] text-white"
+                    >
+                        Sign in with Microsoft
+                    </Button>
                 </div>
             </div>
         </div>
