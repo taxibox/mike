@@ -22,6 +22,9 @@ jobs:
           nvm use 22
           echo "$NVM_BIN" >> $GITHUB_PATH
 
+      - name: Fix git ownership
+        run: git config --global --add safe.directory /var/www/mike
+
       - name: Pull latest code
         run: |
           if [ -d /var/www/mike ]; then
