@@ -43,5 +43,4 @@ jobs:
 
       - name: Restart services
         run: |
-          cd /var/www/mike
-          pm2 restart mike-backend mike-frontend 2>/dev/null || pm2 start ecosystem.config.cjs
+          sudo -u ubuntu pm2 restart mike-backend mike-frontend 2>/dev/null || sudo -u ubuntu pm2 start /var/www/mike/ecosystem.config.cjs
