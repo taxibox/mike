@@ -13,8 +13,12 @@ jobs:
     steps:
       - name: Pull latest code
         run: |
-          cd /opt/mike
-          git pull origin main
+          if [ -d /opt/mike ]; then
+            cd /opt/mike && git pull origin main
+          else
+            sudo git clone https://github.com/taxibox/mike.git /opt/mike
+            sudo chown -R $USER:$USER /opt/mike
+          fi
 
       - name: Install dependencies
         run: |
@@ -27,4 +31,6 @@ jobs:
           npm run build --prefix /opt/mike/frontend
 
       - name: Restart services
-        run: pm2 restart mike-backend mike-frontend
+        run: |
+          cd /opt/mike
+          pm2 restart mike-backend mike-frontend 2>/dev/null || pm2 start ecosystem.config.cjs
