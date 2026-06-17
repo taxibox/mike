@@ -8,20 +8,23 @@ on:
 jobs:
   deploy:
     name: Deploy to stage.taxibox.com.au
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.HOST_STAGE }}
-          username: ubuntu
-          key: ${{ secrets.SSHKEY_STAGE }}
-          script: |
-            cd /opt/mike
-            git pull origin main
-            npm install --prefix backend
-            npm install --prefix frontend
-            npm run build --prefix backend
-            npm run build --prefix frontend
-            pm2 restart mike-backend mike-frontend
+      - name: Pull latest code
+        run: |
+          cd /opt/mike
+          git pull origin main
+
+      - name: Install dependencies
+        run: |
+          npm install --prefix /opt/mike/backend
+          npm install --prefix /opt/mike/frontend
+
+      - name: Build
+        run: |
+          npm run build --prefix /opt/mike/backend
+          npm run build --prefix /opt/mike/frontend
+
+      - name: Restart services
+        run: pm2 restart mike-backend mike-frontend
