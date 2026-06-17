@@ -2,8 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'mike-backend',
-      script: 'backend/dist/index.js',
-      cwd: '/var/www/mike',
+      script: 'dist/index.js',
+      cwd: '/var/www/mike/backend',
       instances: 1,
       autorestart: true,
       watch: false,
