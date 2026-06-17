@@ -27,7 +27,7 @@ jobs:
 
       - name: Pull latest code
         run: |
-          if [ -d /var/www/mike ]; then
+          if [ -d /var/www/mike/.git ]; then
             cd /var/www/mike && git pull origin main
           else
             git clone https://github.com/taxibox/mike.git /var/www/mike
