@@ -30,8 +30,7 @@ jobs:
           if [ -d /var/www/mike ]; then
             cd /var/www/mike && git pull origin main
           else
-            sudo git clone https://github.com/taxibox/mike.git /var/www/mike
-            sudo chown -R $USER:$USER /var/www/mike
+            git clone https://github.com/taxibox/mike.git /var/www/mike
           fi
 
       - name: Install dependencies
