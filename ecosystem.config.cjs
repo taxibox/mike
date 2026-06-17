@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'mike-backend',
       script: 'backend/dist/index.js',
-      cwd: '/opt/mike',
+      cwd: '/var/www/mike',
       instances: 1,
       autorestart: true,
       watch: false,
@@ -15,7 +15,7 @@ module.exports = {
       name: 'mike-frontend',
       script: 'node_modules/.bin/next',
       args: 'start',
-      cwd: '/opt/mike/frontend',
+      cwd: '/var/www/mike/frontend',
       instances: 1,
       autorestart: true,
       watch: false,
