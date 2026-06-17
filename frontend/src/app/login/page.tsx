@@ -41,7 +41,7 @@ export default function LoginPage() {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: "azure",
                 options: {
-                    redirectTo: `${window.location.origin}/mike/assistant`,
+                    redirectTo: `${window.location.origin}/mike/auth/callback?next=/mike/assistant`,
                 },
             });
             if (error) throw error;
