@@ -42,6 +42,7 @@ export default function LoginPage() {
                 provider: "azure",
                 options: {
                     redirectTo: `${window.location.origin}/mike/auth/callback?next=/mike/assistant`,
+                    scopes: "email profile openid",
                 },
             });
             if (error) throw error;
