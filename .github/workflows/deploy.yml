@@ -1,0 +1,27 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to stage.taxibox.com.au
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST_STAGE }}
+          username: ubuntu
+          key: ${{ secrets.SSHKEY_STAGE }}
+          script: |
+            cd /opt/mike
+            git pull origin main
+            npm install --prefix backend
+            npm install --prefix frontend
+            npm run build --prefix backend
+            npm run build --prefix frontend
+            pm2 restart mike-backend mike-frontend
