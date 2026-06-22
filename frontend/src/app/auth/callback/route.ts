@@ -32,7 +32,9 @@ export async function GET(request: NextRequest) {
         if (!error) {
             return NextResponse.redirect(`${appUrl}${next}`);
         }
+        console.error("[auth/callback] exchangeCodeForSession error:", error);
+        return NextResponse.redirect(`${appUrl}/mike/login?error=${encodeURIComponent(error.message)}`);
     }
 
-    return NextResponse.redirect(`${appUrl}/mike/login?error=auth`);
+    return NextResponse.redirect(`${appUrl}/mike/login?error=no_code`);
 }

@@ -34,6 +34,12 @@ export default function LoginPage() {
         }
     }, [authLoading, isAuthenticated, router]);
 
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const err = params.get("error");
+        if (err && err !== "auth") setError(decodeURIComponent(err));
+    }, []);
+
     const handleMicrosoftLogin = async () => {
         setLoading(true);
         setError(null);
