@@ -1,44 +1,9 @@
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
+// Hand off to the client-side exchange page so the browser can access
+// the PKCE code verifier it stored locally during the OAuth initiation.
 export async function GET(request: NextRequest) {
     const { searchParams, origin } = new URL(request.url);
-    const code = searchParams.get("code");
-    const next = searchParams.get("next") ?? "/mike/assistant";
-
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? origin;
-
-    if (code) {
-        const cookieStore = await cookies();
-        const supabaseKey =
-            process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY ||
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-            "";
-        const supabase = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-            supabaseKey,
-            {
-                cookies: {
-                    getAll() {
-                        return cookieStore.getAll();
-                    },
-                    setAll(cookiesToSet) {
-                        cookiesToSet.forEach(({ name, value, options }) =>
-                            cookieStore.set(name, value, options)
-                        );
-                    },
-                },
-            }
-        );
-
-        const { error } = await supabase.auth.exchangeCodeForSession(code);
-        if (!error) {
-            return NextResponse.redirect(`${appUrl}${next}`);
-        }
-        console.error("[auth/callback] exchangeCodeForSession error:", error);
-        return NextResponse.redirect(`${appUrl}/mike/login?error=${encodeURIComponent(error.message)}`);
-    }
-
-    return NextResponse.redirect(`${appUrl}/mike/login?error=no_code`);
+    return NextResponse.redirect(`${appUrl}/mike/auth/exchange?${searchParams.toString()}`);
 }
